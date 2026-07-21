@@ -7,3 +7,9 @@ dist/
 # Dependencies
 node_modules/
 
+# Cache & tools
+.cache/
+.agents/
+.codex/
+*.tsbuildinfo
+
