@@ -19,3 +19,7 @@ app/
   page.tsx                         # App Router entry
   api/{summarize,simplify,
        flashcards,guide}/route.ts  # Request validation + product endpoints
+components/
+  study-workspace.tsx              # Top-level tab state / composition
+  layout/                          # Responsive sidebar + header
+  views/                           # Feature-level interactive surfaces
