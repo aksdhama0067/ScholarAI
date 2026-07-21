@@ -13,3 +13,6 @@ node_modules/
 .codex/
 *.tsbuildinfo
 
+# Environment / API Keys
+.env
+.env*.local
