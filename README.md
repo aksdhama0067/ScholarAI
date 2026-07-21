@@ -7,5 +7,5 @@ A tactile, AI-assisted student workspace built with Next.js App Router, React, T
 ```bash
 pnpm install
 cp .env.example .env.local
-pnpm dev
+npm dev
 ```
