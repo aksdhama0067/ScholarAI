@@ -6,10 +6,3 @@ export const metadata: Metadata = {
   description: "An AI-powered tactile study companion."
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
-}
