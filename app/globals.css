@@ -24,3 +24,7 @@ button { -webkit-tap-highlight-color: transparent; }
 
 ::selection { color: #fff; background: #4f46e5; }
 
+@layer components {
+  .grainy { position: relative; isolation: isolate; }
+  .grainy::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .13; background-image: theme("backgroundImage.grain"); mix-blend-mode: multiply; }
+  .paper-card { @apply grainy rounded-2xl border border-line bg-white/90 shadow-paper; }
