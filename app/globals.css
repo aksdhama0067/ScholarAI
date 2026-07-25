@@ -28,3 +28,14 @@ button { -webkit-tap-highlight-color: transparent; }
   .grainy { position: relative; isolation: isolate; }
   .grainy::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .13; background-image: theme("backgroundImage.grain"); mix-blend-mode: multiply; }
   .paper-card { @apply grainy rounded-2xl border border-line bg-white/90 shadow-paper; }
+  .soft-card { @apply rounded-2xl border border-white/70 bg-white/70 shadow-paper backdrop-blur-sm; }
+  .eyebrow { @apply font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-ink/50; }
+  .nav-link { @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink/60 transition duration-200 hover:bg-white hover:text-ink; }
+  .nav-link-active { @apply bg-ink text-paper shadow-paper hover:bg-ink hover:text-paper; }
+  .icon-button { @apply grid h-10 w-10 place-items-center rounded-xl border border-line bg-white text-ink/70 shadow-sm transition hover:-translate-y-0.5 hover:text-ink hover:shadow-paper; }
+  .pill { @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-2.5 py-1 text-xs font-medium text-ink/70; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
