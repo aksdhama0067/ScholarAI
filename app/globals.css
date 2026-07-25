@@ -9,3 +9,8 @@
 * { box-sizing: border-box; }
 
 html { background: #fbf9f5; }
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: #1c1b1f;
