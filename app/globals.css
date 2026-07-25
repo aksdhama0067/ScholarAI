@@ -21,3 +21,6 @@ body {
 
 button, input, textarea { font: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
+
+::selection { color: #fff; background: #4f46e5; }
+
