@@ -14,5 +14,7 @@ body {
   min-height: 100vh;
   margin: 0;
   color: #1c1b1f;
-    background-color: #fbf9f5;
+  background-color: #fbf9f5;
   background-image: radial-gradient(circle at 10% 0%, rgba(217, 119, 6, .09), transparent 26rem), radial-gradient(circle at 90% 15%, rgba(79, 70, 229, .07), transparent 27rem);
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+}
