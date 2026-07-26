@@ -17,3 +17,15 @@ export function PdfReaderView() {
   const [answer, setAnswer] = useState<string | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
+  const analyse = useCallback(async (nextFile: File) => {
+    setFile(nextFile); setIsLoading(true); setAnswer(null);
+    try {
+      const form = new FormData(); form.append("file", nextFile);
+      const response = await fetch("/api/summarize", { method: "POST", body: form });
+      if (!response.ok) throw new Error("Could not read that document.");
+      setSummary(await response.json());
+    } catch (error) {
+      setAnswer(error instanceof Error ? error.message : "Something got tangled. Please try another PDF.");
+    } finally { setIsLoading(false); }
+  }, []);
+
