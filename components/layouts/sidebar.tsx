@@ -11,9 +11,3 @@ const navigation: { id: WorkspaceTab; label: string; icon: typeof LayoutDashboar
   );
 }
   { id: "dashboard", label: "Your desk", icon: LayoutDashboard },
-  { id: "reader", label: "Paper reader", icon: FileText },
-  { id: "simplify", label: "Make it clear", icon: Sparkles },
-  { id: "flashcards", label: "Memory deck", icon: Layers3 },
-  { id: "planner", label: "Study map", icon: CalendarDays },
-  { id: "guide", label: "Future guide", icon: Compass }
-];
