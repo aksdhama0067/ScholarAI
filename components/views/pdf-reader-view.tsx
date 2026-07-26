@@ -29,3 +29,11 @@ export function PdfReaderView() {
     } finally { setIsLoading(false); }
   }, []);
 
+  const ask = async (prompt: string) => {
+    setQuestion(prompt); setAnswer(null);
+    try {
+      const response = await fetch("/api/guide", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `${prompt}\n\nUse this document context: ${summary.overview}` }) });
+      const data = await response.json(); setAnswer(data.answer ?? "I couldn't form an answer just yet.");
+    } catch { setAnswer("I couldn't reach the study guide. Try once more in a moment."); }
+  };
+
