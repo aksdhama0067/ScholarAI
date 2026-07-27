@@ -9,3 +9,8 @@ export const demoSummary: Summary = {
     "Use one clear example, then name the underlying pattern.",
     "Retrieval and spacing make understanding stick longer than rereading."
   ],
+  concepts: [
+    { label: "Scaffolding", detail: "Give just enough support, then gradually take it away.", tint: "sage" },
+    { label: "Chunking", detail: "Group details into meaningful, recallable units.", tint: "terra" },
+    { label: "Retrieval", detail: "Practice bringing an answer to mind without looking.", tint: "indigo" }
+  ],
