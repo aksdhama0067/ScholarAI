@@ -10,3 +10,11 @@ export type Summary = {
 };
 
 
+export type Flashcard = {
+  id: number;
+  topic: string;
+  prompt: string;
+  answer: string;
+  cue: string;
+  color: "sage" | "terra" | "indigo";
+};
