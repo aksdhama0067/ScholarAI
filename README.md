@@ -44,3 +44,9 @@ The routes return a meaningful local response when no provider key is configured
 - **Study map:** daily agenda, completion state, weekly goals, and an SRS revision queue.
 - **Future guide:** tailored academic/career conversation with an active route.
 
+## Notes for production
+
+- Persist users, documents, cards, and SRS intervals in a database (e.g. Postgres + Prisma/Drizzle).
+- Store originals in private object storage and keep only retrieval-safe document chunks in your search index.
+- Add authentication, rate limits, request tracing, and a moderation/abuse layer before accepting public uploads.
+- For long documents, queue extraction and generation rather than keeping the HTTP request open.
