@@ -34,20 +34,68 @@ export function SimplifierView() {
       }
       if (typeof fastData.explanation === "string") setResult(fastData.explanation);
 
-      // Fire-and-forget full answer; when it returns, replace the result
-      fetch("/api/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, depth: mode, mode: "full" })
-      })
-        .then((r) => r.json())
-        .then((fullData) => {
-          if (fullData && typeof fullData.explanation === "string") setResult(fullData.explanation);
-        })
-        .catch((e) => {
-          console.error("full answer error", e);
-        })
-        .finally(() => setLoading(false));
+      // Stream the full answer and progressively update the result
+      try {
+        const streamResp = await fetch("/api/ask/stream", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text, depth: mode, maxOutputTokens: 350 })
+        });
+
+        if (!streamResp.ok || !streamResp.body) {
+          // Fallback: fetch full answer as JSON
+          const fullFallback = await fetch("/api/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text, depth: mode, mode: "full", maxOutputTokens: 350 })
+          });
+          const fullData = await fullFallback.json();
+          if (fullData?.explanation) setResult(fullData.explanation);
+          setLoading(false);
+          return;
+        }
+
+        const reader = streamResp.body.getReader();
+        const decoder = new TextDecoder();
+        let done = false;
+        let buffered = "";
+
+        while (!done) {
+          const { value, done: d } = await reader.read();
+          if (value) {
+            buffered += decoder.decode(value, { stream: true });
+
+            // SSE framing: split on double newlines
+            const parts = buffered.split("\n\n");
+            buffered = parts.pop() || "";
+
+            for (const part of parts) {
+              if (part.startsWith("data: ")) {
+                const payload = part.replace(/^data: /, "");
+                if (payload === "[DONE]") {
+                  done = true;
+                  break;
+                }
+                // Append chunk to result
+                setResult((prev) => (prev || "") + payload);
+              } else if (part.startsWith("event: error")) {
+                const errMsg = part.split("\n")[1]?.replace(/^data: /, "") || "Stream error";
+                setError(errMsg);
+                done = true;
+                break;
+              }
+            }
+          }
+          if (d) {
+            done = true;
+            break;
+          }
+        }
+      } catch (streamErr) {
+        console.error("streaming error", streamErr);
+      } finally {
+        setLoading(false);
+      }
 
     } catch (err) {
       console.error(err);
