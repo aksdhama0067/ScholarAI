@@ -1,8 +1,14 @@
 import fetch from "node-fetch";
 
-export async function generateWithHuggingFace(model: string, prompt: string, max_new_tokens = 128, temperature = 0.2) {
+export async function generateWithHuggingFace(
+  model: string,
+  prompt: string,
+  max_new_tokens = 128,
+  temperature = 0.2
+) {
   const HF_TOKEN = process.env.HF_API_KEY;
   if (!HF_TOKEN) throw new Error('HF_API_KEY not set');
+
   const url = `https://api-inference.huggingface.co/models/${encodeURIComponent(model)}`;
   const body = {
     inputs: prompt,
@@ -22,10 +28,7 @@ export async function generateWithHuggingFace(model: string, prompt: string, max
   }
 
   const data = await res.json();
-  // HF text-generation models often return an array with generated_text
   if (Array.isArray(data) && data[0]?.generated_text) return data[0].generated_text as string;
-  if (typeof data.generated_text === 'string') return data.generated_text;
-
-  // Some models return { error: "..." } or other shapes — fallback to stringifying
+  if (typeof (data as any).generated_text === 'string') return (data as any).generated_text as string;
   return typeof data === 'string' ? data : JSON.stringify(data);
 }

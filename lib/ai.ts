@@ -1,14 +1,16 @@
 import OpenAI from "openai";
+import { generateWithHuggingFace } from "./adapters/hfAdapter";
 
-type GenerateRequest = { system: string; prompt: string; maxOutputTokens?: number };
+type GenerateRequest = { system: string; prompt: string; maxOutputTokens?: number; mode?: "fast" | "full" };
 
 /**
  * One provider seam for the app. It returns null when no key is present so every
  * feature can keep its high-quality local demo behavior during design/dev.
  */
-export async function generateAIText({ system, prompt, maxOutputTokens = 900 }: GenerateRequest) {
+export async function generateAIText({ system, prompt, maxOutputTokens = 900, mode = "full" }: GenerateRequest) {
   const provider = process.env.AI_PROVIDER ?? "openai";
 
+  // Anthropic (unchanged)
   if (provider === "anthropic" && process.env.ANTHROPIC_API_KEY) {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -20,10 +22,21 @@ export async function generateAIText({ system, prompt, maxOutputTokens = 900 }: 
     return data.content?.find((part) => part.type === "text")?.text ?? null;
   }
 
+  // Hugging Face adapter: supports fast | full modes
+  if (provider === "hf" && process.env.HF_API_KEY) {
+    const model = process.env.HF_MODEL ?? (mode === "fast" ? "google/flan-t5-small" : "google/flan-t5-large");
+    const maxNewTokens = mode === "fast" ? Math.min(80, maxOutputTokens) : maxOutputTokens;
+    const promptText = `${system}\n\n${prompt}`;
+    const out = await generateWithHuggingFace(model, promptText, maxNewTokens, mode === "fast" ? 0.1 : 0.6);
+    return out ?? null;
+  }
+
+  // OpenAI fallback (respect fast/full by model selection)
   if (process.env.OPENAI_API_KEY) {
     const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const model = process.env.OPENAI_MODEL ?? (mode === "fast" ? "gpt-4o-mini" : "gpt-5.6-luna");
     const response = await client.responses.create({
-      model: process.env.OPENAI_MODEL ?? "gpt-5.6-luna",
+      model,
       input: `${system}\n\n${prompt}`,
       max_output_tokens: maxOutputTokens
     });
