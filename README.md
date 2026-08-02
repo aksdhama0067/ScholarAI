@@ -1,49 +1,25 @@
 # ScholarAI
 
-A tactile, AI-assisted student workspace built with Next.js App Router, React, Tailwind CSS, Framer Motion, and Lucide icons.
+[![Build](https://img.shields.io/github/actions/workflow/status/OWNER/REPO/ci.yml?branch=main)](https://github.com/OWNER/REPO/actions)
+[![License](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+[![Typescript](https://img.shields.io/badge/ts-%3E%3D5.0-blue)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-%3E%3D14.0-black)](https://nextjs.org/)
 
-## Start it
+A tactile, AI-assisted student workspace built with Next.js (App Router), React, and Tailwind. ScholarAI provides a paper reader, summarization and simplification lenses, interactive flashcards, and a study planner — useful for students and educators who want an AI-enhanced study studio.
 
+Demo
+- The UI includes a no-key demo mode for visual review. To enable live AI features, set one of the provider keys (OpenAI / Anthropic / Hugging Face) as described below.
+
+Quick start
 ```bash
+# 1. install
 pnpm install
+
+# 2. copy example env and edit keys
 cp .env.example .env.local
+
+# 3. run (dev)
 pnpm dev
-```
-
-The UI works in polished demo mode without credentials. Add `OPENAI_API_KEY` or select `AI_PROVIDER=anthropic` with `ANTHROPIC_API_KEY` to turn on live generation. Never expose those keys through `NEXT_PUBLIC_` variables.
-
-## Architecture
-
-```text
-app/
-  page.tsx                         # App Router entry
-  api/{summarize,simplify,
-       flashcards,guide}/route.ts  # Request validation + product endpoints
-components/
-  study-workspace.tsx              # Top-level tab state / composition
-  layout/                          # Responsive sidebar + header
-  views/                           # Feature-level interactive surfaces
-lib/
-  ai.ts                            # OpenAI / Anthropic provider seam
-  mock-data.ts                     # Useful, no-key demo content
-  types.ts                         # Shared product data contracts
-```
-
-### Request flow
-
-`View → /api route → lib/ai provider seam → OpenAI Responses API or Anthropic Messages API`
-
-The routes return a meaningful local response when no provider key is configured, which makes visual development, demos, and offline product reviews frictionless.
-
-## Feature map
-
-- **Your desk:** streak, goals, rhythm chart, current study trail, and mastery snapshot.
-- **Paper reader:** drag-and-drop upload, PDF text extraction, grounded summary, concept tags, and follow-up prompts.
-- **Make it clear:** depth lenses from ELI5 through deep dive.
-- **Memory deck:** spring-animated 3D cards, spatial cues, grading buttons, and instant feedback quiz.
-- **Study map:** daily agenda, completion state, weekly goals, and an SRS revision queue.
-- **Future guide:** tailored academic/career conversation with an active route.
-
 ## Notes for production
 
 - Persist users, documents, cards, and SRS intervals in a database (e.g. Postgres + Prisma/Drizzle).
