@@ -43,3 +43,7 @@ export function DashboardView({ navigate }: { navigate: (tab: WorkspaceTab) => v
   );
 }
 
+function Metric({ icon: Icon, value, label, detail, tint }: { icon: typeof Clock3; value: string; label: string; detail: string; tint: "sage" | "terra" | "indigo" }) {
+  const styles = { sage: "bg-sage-pale text-sage-deep", terra: "bg-terra-pale text-terra-deep", indigo: "bg-indigo-pale text-indigo-deep" };
+  return <div className="soft-card flex items-start gap-4 p-4 sm:p-5"><span className={`grid h-11 w-11 place-items-center rounded-xl ${styles[tint]}`}><Icon size={20}/></span><div><p className="text-2xl font-bold tracking-tight">{value}</p><p className="text-sm text-ink/65">{label}</p><p className="mt-1 text-[11px] font-medium text-ink/40">{detail}</p></div></div>;
+}
