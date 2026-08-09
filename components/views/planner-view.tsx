@@ -84,3 +84,117 @@ export function PlannerView() {
         </div>
       </section>
 
+      <section className="grid gap-5 xl:grid-cols-[1.08fr_.92fr]">
+        <div className="paper-card p-5 sm:p-6">
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <p className="eyebrow mb-1">Monday · Sep 16</p>
+              <h3 className="text-lg font-bold">Your gentle agenda</h3>
+            </div>
+            <button className="icon-button h-9 w-9" aria-label="Add study item">
+              <Plus size={18} />
+            </button>
+          </div>
+          <div className="space-y-3">
+            {schedule.map((item, index) => (
+              <motion.button
+                whileTap={{ scale: 0.99 }}
+                onClick={() => done(index)}
+                key={item.title}
+                className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left transition ${
+                  completed.includes(index)
+                    ? "border-sage/25 bg-sage-pale/55"
+                    : "border-line bg-white hover:shadow-paper"
+                }`}
+              >
+                <span
+                  className={`h-10 w-1 shrink-0 rounded-full ${
+                    lineColor[item.color as keyof typeof lineColor]
+                  }`}
+                />
+                <span className="w-10 font-mono text-[10px] text-ink/45">{item.time}</span>
+                <span className="min-w-0 flex-1">
+                  <span
+                    className={`block text-sm font-bold ${
+                      completed.includes(index) ? "text-ink/45 line-through" : ""
+                    }`}
+                  >
+                    {item.title}
+                  </span>
+                  <span className="block text-xs text-ink/45">{item.tag}</span>
+                </span>
+                <span
+                  className={`grid h-6 w-6 place-items-center rounded-full border transition ${
+                    completed.includes(index)
+                      ? "border-sage bg-sage text-white"
+                      : "border-line text-transparent"
+                  }`}
+                >
+                  <Check size={14} />
+                </span>
+              </motion.button>
+            ))}
+          </div>
+          <button className="mt-4 flex items-center gap-2 text-xs font-bold text-indigo transition hover:text-indigo-deep">
+            <Plus size={15} /> Add a calm task
+          </button>
+        </div>
+
+        <aside className="paper-card grainy overflow-hidden">
+          <div className="bg-sage-pale/65 p-5">
+            <div className="flex items-center justify-between">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-white text-sage-deep shadow-sm">
+                <Flame size={20} />
+              </span>
+              <span className="pill border-sage/20 bg-white/70 text-sage-deep">SRS tuned</span>
+            </div>
+            <p className="mt-5 text-4xl font-bold tracking-tight">32</p>
+            <p className="text-sm text-ink/65">cards return today</p>
+          </div>
+          <div className="p-5">
+            <p className="mb-4 text-sm font-bold">Revision queue</p>
+            <div className="space-y-3">
+              <Queue topic="Graph theory" count="12 cards" progress="70%" color="sage" />
+              <Queue topic="OS processes" count="8 cards" progress="45%" color="indigo" />
+              <Queue topic="Calculus" count="12 cards" progress="25%" color="terra" />
+            </div>
+            <div className="mt-5 rounded-xl bg-ink p-4 text-paper">
+              <div className="mb-1 flex items-center gap-2">
+                <Target size={15} className="text-terra" />
+                <p className="text-xs font-bold">Your next milestone</p>
+              </div>
+              <p className="text-xs leading-5 text-paper/70">
+                One more review round unlocks your “staying curious” badge.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </div>
+  );
+}
+
+function Queue({
+  topic,
+  count,
+  progress,
+  color,
+}: {
+  topic: string;
+  count: string;
+  progress: string;
+  color: "sage" | "terra" | "indigo";
+}) {
+  const shade = { sage: "bg-sage", terra: "bg-terra", indigo: "bg-indigo" }[color];
+  return (
+    <div>
+      <div className="mb-1.5 flex items-center justify-between text-xs">
+        <span className="font-semibold">{topic}</span>
+        <span className="text-ink/45">{count}</span>
+      </div>
+      <div className="h-1.5 overflow-hidden rounded-full bg-line">
+        <div className={`h-full rounded-full ${shade}`} style={{ width: progress }} />
+      </div>
+    </div>
+  );
+}
