@@ -1,4 +1,9 @@
 import fetch from "node-fetch";
+import process from "node:process";
+
+interface HFResponse {
+  generated_text?: string;
+}
 
 export async function generateWithHuggingFace(
   model: string,
@@ -27,8 +32,11 @@ export async function generateWithHuggingFace(
     throw new Error(`HF inference error: ${res.status} ${text}`);
   }
 
-  const data = await res.json();
-  if (Array.isArray(data) && data[0]?.generated_text) return data[0].generated_text as string;
-  if (typeof (data as any).generated_text === 'string') return (data as any).generated_text as string;
+  const data = (await res.json()) as HFResponse | HFResponse[] | string;
+
+  if (Array.isArray(data) && data[0]?.generated_text) return data[0].generated_text;
+  if (typeof data === 'object' && data !== null && 'generated_text' in data && typeof data.generated_text === 'string') {
+    return data.generated_text;
+  }
   return typeof data === 'string' ? data : JSON.stringify(data);
 }
