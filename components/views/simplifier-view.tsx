@@ -1,6 +1,5 @@
 "use client";
 
-import { _motion } from "framer-motion";
 import { ArrowRight, Lightbulb, LoaderCircle, Sparkles } from "lucide-react";
 import { useState } from "react";
 
@@ -24,7 +23,7 @@ export function SimplifierView() {
       const fastResp = await fetch("/api/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, depth: mode, mode: "fast" })
+        body: JSON.stringify({ text, depth: mode, mode: "fast" }),
       });
       const fastData = await fastResp.json();
       if (fastData?.error) {
@@ -39,7 +38,7 @@ export function SimplifierView() {
         const streamResp = await fetch("/api/ask/stream", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text, depth: mode, maxOutputTokens: 350 })
+          body: JSON.stringify({ text, depth: mode, maxOutputTokens: 350 }),
         });
 
         if (!streamResp.ok || !streamResp.body) {
@@ -47,7 +46,7 @@ export function SimplifierView() {
           const fullFallback = await fetch("/api/ask", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text, depth: mode, mode: "full", maxOutputTokens: 350 })
+            body: JSON.stringify({ text, depth: mode, mode: "full", maxOutputTokens: 350 }),
           });
           const fullData = await fullFallback.json();
           if (fullData?.explanation) setResult(fullData.explanation);
@@ -96,7 +95,6 @@ export function SimplifierView() {
       } finally {
         setLoading(false);
       }
-
     } catch (err) {
       console.error(err);
       setError("Something went wrong.");
@@ -104,5 +102,77 @@ export function SimplifierView() {
     }
   };
 
-  return <div className="grid gap-5 xl:grid-cols-[.94fr_1.06fr]"><section className="paper-card p-5 sm:p-7"><div className="mb-6"><span className="mb-4 grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-sky-400 to-indigo-600 text-white"><Lightbulb /></span><h3 className="mb-1 text-lg font-semibold">Simplify</h3><p className="text-sm text-muted-foreground">Turn complicated ideas into something you can explain to a friend.</p></div><div className="flex gap-3"><select value={mode} onChange={(e) => setMode(e.target.value as any)} className="input"><option>ELI5</option><option>High school</option><option>Analogy-driven</option><option>Deep dive</option></select><div className="flex-1"></div><button onClick={simplify} className="btn btn-primary" disabled={loading}><ArrowRight className="mr-2" />{loading ? <><LoaderCircle className="animate-spin mr-2" />Thinking...</> : <>Simplify</>}</button></div><textarea value={text} onChange={(e) => setText(e.target.value)} className="mt-4 textarea h-40 w-full" /></section><section className="paper-card p-5 sm:p-7"><div className="mb-6"><span className="mb-4 grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white"><Sparkles /></span><h3 className="mb-1 text-lg font-semibold">Result</h3><p className="text-sm text-muted-foreground">You'll get a quick summary immediately, followed by a fuller explanation shortly after.</p></div>{error && <div className="text-red-600">{error}</div>}{result ? <div className="prose max-w-none"><p>{result}</p></div> : <div className="text-sm text-muted-foreground">{loading ? <><LoaderCircle className="animate-spin inline-block mr-2" />Generating...</> : "Your simplified explanation will appear here."}</div>}</section></div>;
+  return (
+    <div className="grid gap-5 xl:grid-cols-[.94fr_1.06fr]">
+      <section className="paper-card p-5 sm:p-7">
+        <div className="mb-6">
+          <span className="mb-4 grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-sky-400 to-indigo-600 text-white">
+            <Lightbulb />
+          </span>
+          <h3 className="mb-1 text-lg font-semibold">Simplify</h3>
+          <p className="text-sm text-muted-foreground">
+            Turn complicated ideas into something you can explain to a friend.
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <select
+            value={mode}
+            onChange={(e) => setMode(e.target.value as (typeof modes)[number])}
+            className="input"
+          >
+            <option>ELI5</option>
+            <option>High school</option>
+            <option>Analogy-driven</option>
+            <option>Deep dive</option>
+          </select>
+          <div className="flex-1" />
+          <button onClick={simplify} className="btn btn-primary" disabled={loading}>
+            <ArrowRight className="mr-2" />
+            {loading ? (
+              <>
+                <LoaderCircle className="animate-spin mr-2" />
+                Thinking...
+              </>
+            ) : (
+              <>Simplify</>
+            )}
+          </button>
+        </div>
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          className="mt-4 textarea h-40 w-full"
+        />
+      </section>
+
+      <section className="paper-card p-5 sm:p-7">
+        <div className="mb-6">
+          <span className="mb-4 grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white">
+            <Sparkles />
+          </span>
+          <h3 className="mb-1 text-lg font-semibold">Result</h3>
+          <p className="text-sm text-muted-foreground">
+            You'll get a quick summary immediately, followed by a fuller explanation shortly after.
+          </p>
+        </div>
+        {error && <div className="text-red-600">{error}</div>}
+        {result ? (
+          <div className="prose max-w-none">
+            <p>{result}</p>
+          </div>
+        ) : (
+          <div className="text-sm text-muted-foreground">
+            {loading ? (
+              <>
+                <LoaderCircle className="animate-spin inline-block mr-2" />
+                Generating...
+              </>
+            ) : (
+              "Your simplified explanation will appear here."
+            )}
+          </div>
+        )}
+      </section>
+    </div>
+  );
 }
