@@ -1,3 +1,4 @@
+import process from "node:process";
 import OpenAI from "openai";
 import { generateWithHuggingFace } from "./adapters/hfAdapter";
 
