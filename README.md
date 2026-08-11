@@ -9,7 +9,7 @@ A tactile, AI-assisted student workspace built with Next.js (App Router), React,
 
 Demo
 - The UI includes a no-key demo mode for visual review. To enable live AI features, set one of the provider keys (OpenAI / Anthropic / Hugging Face) as described below.
-
+   
 Quick start
 ```bash
 # 1. install
