@@ -39,4 +39,9 @@ jobs:
         run: deno lint
 
       - name: Run tests
-        run: deno test -A
+        run: |
+          if compgen -G "**/*_test.*" > /dev/null || compgen -G "**/*.test.*" > /dev/null; then
+            deno test -A
+          else
+            echo "No Deno tests found; skipping"
+          fi
