@@ -1,4 +1,4 @@
-import { StudyWorkspace } from "@/components/study-workspace";
+import { StudyWorkspace } from "@/components/views/study-workspace";
 
 export default function Home() {
   return <StudyWorkspace />;
