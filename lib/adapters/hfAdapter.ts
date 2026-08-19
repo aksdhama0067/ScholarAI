@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import process from "node:process";
 
 interface HFResponse {
