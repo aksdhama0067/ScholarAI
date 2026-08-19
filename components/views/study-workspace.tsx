@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { DashboardView } from "@/components/views/dashboard-view";
-import { FlashcardsView } from "@/components/views/flashcards-view";
+import { FlashcardView } from "@/components/views/flash-card";
 import { GuideView } from "@/components/views/guide-view";
 import { PdfReaderView } from "@/components/views/pdf-reader-view";
 import { PlannerView } from "@/components/views/planner-view";
