@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "lint": "echo 'Skipping lint'"
+    "lint": "echo 'Skipping lint'",
+    "test": "echo 'No tests configured'"
   },
   "dependencies": {
     "framer-motion": "^12.0.0",
